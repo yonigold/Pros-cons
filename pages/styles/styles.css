@@ -1,0 +1,63 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+* {
+    font-family: 'Inter', sans-serif;
+}
+  
+body {
+    background-color: #0d0e11;
+}
+
+h1 {
+    color: #FAFAFA;
+    font-size: 4rem;
+}
+
+button {
+    background-color: #301E67;
+}
+
+input 
+{
+    background-color: #FAFAFA;
+}
+
+/* Add this in your CSS file */
+/* Add this in your CSS file */
+@keyframes spinner {
+    to {transform: rotate(360deg);}
+  }
+  
+  .spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    border-top-color: #333;
+    animation: spinner .6s linear infinite;
+  }
+
+
+  .title {
+    text-shadow: 3px 4px 4px rgba(10, 3, 3, 0.5);
+    color: #f2f2f2;
+  }
+  
+  .modal {
+    /* other styles */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s, visibility 0.5s transform 0.5s;
+  }
+  
+  .modal-open {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  
+
+/* #5E5DF0 */
