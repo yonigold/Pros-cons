@@ -1,16 +1,27 @@
 import axios from 'axios';
+import { NextRequest, NextResponse } from 'next/server';
 
-const openaiDecesion =  async (req, res) => {
-    const { question, optionA, optionB } = req.body;
+export const config = {
+    runtime: "edge",
+  };
+
+const openaiDecesion =  async (req) => {
+    const { question, optionA, optionB } = await req.json();
 
     const prompt = `Based on the two options ${optionA} and ${optionB} in the context of ${question}, recommend me the best option. No need to provide pros and cons, only the best option.
     format the response in the following format:
     The best option is: 
 
-`
+`;
 
 try {
-    const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+        },
+        body: JSON.stringify({
         model: "gpt-3.5-turbo",
         messages: [
             {
@@ -22,23 +33,22 @@ try {
                 content: prompt
             }
         ],
-        max_tokens: 1000,
+        max_tokens: 100,
         temperature: 0,
-    }, {
-        headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
-        }
+    })
     }); 
 
-    
+    if (!response.ok) {
+        throw new Error(response.statusText);
+    }
 
-res.status(200).json({ response: response.data.choices[0].message.content });
+    const data = await response.json();
 
-} catch (error) {
-    console.log(error.response.data);
-    res.status(500).json({ error: error.message });
 
-}
+return new Response(JSON.stringify({ response: data.choices[0].message.content }), { status: 200, headers: { 'Content-Type': 'application/json' }});
+    } catch (error) {
+        console.log(error);
+        return new Response(JSON.stringify({ error: error.message }), { status: 500, headers: { 'Content-Type': 'application/json' }});
+    }
 }
 export default openaiDecesion;

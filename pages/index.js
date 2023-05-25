@@ -47,21 +47,24 @@ export default function Home() {
 
       
       
-  
       if (currentOption !== null && currentSection !== null) {
         const trimmedLine = line.trim();
-        if (trimmedLine.startsWith('1.') || trimmedLine.startsWith('2.') || trimmedLine.startsWith('3.')) {
-          options[currentOption][currentSection].push(trimmedLine.slice(2).trim());
+        if (trimmedLine.startsWith('1.') || trimmedLine.startsWith('2.')) {
+            options[currentOption][currentSection].push(trimmedLine.slice(2).trim());
         }
-      }
     }
-  
-    if (Object.keys(options).length !== 2 || !options[Object.keys(options)[0]].pros.length || !options[Object.keys(options)[0]].cons.length || !options[Object.keys(options)[1]].pros.length || !options[Object.keys(options)[1]].cons.length) {
-      throw new Error('Invalid response format');
-    }
-    
-    return { options, bestOption };
-  }
+}
+
+if (Object.keys(options).length !== 2 || 
+    options[Object.keys(options)[0]].pros.length < 2 || 
+    options[Object.keys(options)[0]].cons.length < 2 || 
+    options[Object.keys(options)[1]].pros.length < 2 || 
+    options[Object.keys(options)[1]].cons.length < 2) {
+    throw new Error('Invalid response format');
+}
+
+return { options, bestOption };
+}
   
   
   
@@ -89,6 +92,7 @@ export default function Home() {
     setBestOption(null);            
     try {
       const result = await axios.post('/api/openai', { question, optionA, optionB });
+      console.log(result.data.response);
       const parsedData = parseResponse(result.data.response);
   
       setApiResponse(parsedData.options);
@@ -104,8 +108,9 @@ export default function Home() {
     };
     
       const resultDecision = await axios.post('/api/openaiDecesion', prosAndCons);
-      setBestOption(resultDecision.data.response);
       console.log(resultDecision.data.response);
+      setBestOption(resultDecision.data.response);
+      
       
       
 
