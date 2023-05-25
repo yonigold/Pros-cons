@@ -3,7 +3,7 @@ import axios from 'axios';
 export default async (req, res) => {
     const { question, optionA, optionB } = req.body;
     const prompt = `Provide me the pros and cons of this two options ${optionA} and ${optionB} in the context of ${question}.
-    Then recommend me the best option based on the analysis.
+    
     The response should always be in the following format:
     ${optionA}:
     Pros:
@@ -23,8 +23,8 @@ export default async (req, res) => {
     1.
     2.
     3.
+    `;
 
-    The best option is: ...answer... `;
     try {
          const response = await axios.post('https://api.openai.com/v1/chat/completions', {
         model: "gpt-3.5-turbo",
@@ -56,3 +56,5 @@ export default async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 }
+
+

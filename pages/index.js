@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import Head from 'next/head';
 import Modal from '../components/Modal';
 import { addToWaitlist } from '@/firebase/waitlist';
@@ -13,8 +13,14 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [bestOption, setBestOption] = useState(null);
   const [formError, setFormError] = useState('');
+  const [waitlistEmail, setWaitlistEmail] = useState('');
+  const [waitlistError, setWaitlistError] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [waitlistSuccess, setWaitlistSuccess] = useState(false);
+
+
+
+
 
   function parseResponse(response) {
     const lines = response.split('\n');
@@ -34,10 +40,11 @@ export default function Home() {
         currentOption = line.slice(0, -1).trim();
         options[currentOption] = { pros: [], cons: [] };
         continue;
-      } else if (line.startsWith('The best option is: ')) {
-        bestOption = line.slice('The best option is: '.length).trim();
+      } else if (line.startsWith('The best option is:')) {
+        bestOption = line.slice('The best option is:'.length).trim();
         continue;
       }
+
       
       
   
@@ -64,6 +71,12 @@ export default function Home() {
   const handleSubmit =  async (event) => {
     event.preventDefault();
 
+    // const hasGenerated = localStorage.getItem('formSubmitted');
+    // if (hasGenerated) {
+    //   setModalOpen(true);
+    //   return;
+    // }
+
     if (!question.trim() || !optionA.trim() || !optionB.trim()) {
       setFormError('Please fill all the fields');
       return;
@@ -79,14 +92,29 @@ export default function Home() {
       const parsedData = parseResponse(result.data.response);
   
       setApiResponse(parsedData.options);
-      setBestOption(parsedData.bestOption);
+      // setBestOption(parsedData.bestOption);
       console.log(parsedData.options);
-      console.log(parsedData.bestOption);
+      // console.log(parsedData.bestOption);
+      // localStorage.setItem('formSubmitted', 'true');
+      const prosAndCons = {
+        question: question,
+        optionA: optionA,
+        optionB: optionB,
+
+    };
+    
+      const resultDecision = await axios.post('/api/openaiDecesion', prosAndCons);
+      setBestOption(resultDecision.data.response);
+      console.log(resultDecision.data.response);
+      
+      
 
       } catch (error) {
         console.log('Invalid response format', error);
+        setFormError('An error occurred. Please try again later.');
         if (error.response) {
-          setFormError(`An error occurred: ${error.response.data.error}`);
+          setFormError(`An error occurred, please try again later:`);
+          // console.log(error.response.data);
         }  else if (error.request) {
           if (error.code === 'ECONNABORTED') {
             setFormError('The request took too long - please try again later.');
@@ -94,7 +122,8 @@ export default function Home() {
           setFormError('No response was received from the server.');
           }
         } else {
-          setFormError(`An error occurred: ${error.message}`);
+          setFormError(`An error occurred, please try again later:`);
+          // console.log('Error', error.message);
         }
       } finally {
         setLoading(false);
@@ -106,11 +135,15 @@ export default function Home() {
     const handleWaitlistSubmit = async (event) => {
       event.preventDefault();
       const email = event.target.email.value;
-      if (!email.trim()) {
-        setFormError('Please enter your email');
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!email.trim() || !emailRegex.test(email)) {
+        setWaitlistError('Please enter your email address.');
+        setTimeout(() => {
+          setWaitlistError('');
+        }, 4000);
         return;
       } else {
-        setFormError('');
+        setWaitlistError('');
       }
       try {
         await addToWaitlist(email);
@@ -121,9 +154,19 @@ export default function Home() {
         }, 2000); // the modal will close after 2 seconds
       } catch (error) {
         console.log(error);
-        setFormError('An error occurred. Please try again later.');
-      }
+        if (error.message === 'You must wait at least 5 minutes between submissions.') {
+          setWaitlistError('You must wait at least 5 minutes between submissions.');
+        } else if (error.message === `You're already on the waitlist.`) {
+          setWaitlistError('Email already in waitlist');
+        } else {
+          setWaitlistError('An error occurred. Please try again later.');
+        }
+        setTimeout(() => {
+          setWaitlistError('');
+        }, 4000);
     }
+  }
+
 
 
 
@@ -140,12 +183,13 @@ export default function Home() {
       <meta property="og:title" content="Pros 'n Cons" />
       <meta property="og:description" content="Have a hard time making decisions? Let AI help you! Simply enter your question and options below and we will do the rest." />
       <meta property="og:type" content="website" />
+      <link rel="icon" href="/favicon.png" />
       </Head>
     <div className="flex justify-center min-h-screen flex-col"><button 
   className="px-4 py-2 bg-indigo-900 text-white rounded" 
   onClick={() => setModalOpen(true)}
 >
-  Join Waitlist
+Join Waitlist for Full App Experience!
 </button>
 
 <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
@@ -162,12 +206,12 @@ export default function Home() {
       type="email"
       name="email"
       placeholder="Enter your email"
-      className="p-2 border rounded w-full md:w-2/3 mx-auto mb-2"
+      className="p-2 border rounded w-full md:w-2/3 mx-auto mb-2 rounded-md border border-gray-200 bg-white text-sm shadow-lg font-satoshi font-medium focus:border-black focus:outline-none focus:ring-0"
     />
-    <button type="submit" className="w-full md:w-2/3 mx-auto bg-indigo-900 text-white font-semibold py-2 px-3 rounded hover:bg-blue-600 transition duration-200">
+    <button type="submit" className="w-full md:w-2/3 mx-auto bg-indigo-900 text-white font-semibold py-2 px-3 rounded hover:bg-blue-600 transition duration-200 ">
       Join Waitlist
     </button>
-    {formError && <p className="text-red-500 text-sm mt-2">{formError}</p>}
+    {waitlistError && <p className="text-red-500 text-sm mt-2">{waitlistError}</p>}
   </form>
   ) : (
     <p className="text-green-500 text-sm mt-2 text-center">Thank you for joining our waitlist!</p>
@@ -192,7 +236,9 @@ export default function Home() {
       name="topic"
       value={question}
       onChange={(e) => setQuestion(e.target.value)}
-      className="w-full p-2 border rounded mb-4"
+      className="w-full p-2 border rounded mb-4 rounded-md border border-gray-200 bg-white text-sm shadow-lg font-satoshi font-medium focus:border-black focus:outline-none focus:ring-0"
+      minLength="10"
+      maxLength="200"
     />
     <div className="flex flex-col md:flex-row md:justify-between mb-4">
       <div className="mb-4 md:mr-2 md:mb-0">
@@ -203,7 +249,7 @@ export default function Home() {
           name="optionA"
           value={optionA}
           onChange={(e) => setOptionA(e.target.value)}
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border rounded rounded-md border border-gray-200 bg-white text-sm shadow-lg font-satoshi font-medium focus:border-black focus:outline-none focus:ring-0"
         />
       </div>
       <div className="mb-4 md:ml-2 md:mb-0">
@@ -214,7 +260,7 @@ export default function Home() {
           name="optionB"
           value={optionB}
           onChange={(e) => setOptionB(e.target.value)}
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border rounded rounded-md border border-gray-200 bg-white text-sm shadow-lg font-satoshi font-medium focus:border-black focus:outline-none focus:ring-0"
         />
       </div>
     </div>
@@ -298,6 +344,7 @@ export default function Home() {
   
 );
 }
+
 
 
 
