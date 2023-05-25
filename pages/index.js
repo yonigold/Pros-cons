@@ -38,6 +38,7 @@ export default function Home() {
         continue;
       } else if (line.endsWith(':')) {
         currentOption = line.slice(0, -1).trim();
+        currentOption = currentOption.replace(/['"]+/g, ''); 
         options[currentOption] = { pros: [], cons: [] };
         continue;
       } else if (line.startsWith('The best option is:')) {
@@ -55,11 +56,11 @@ export default function Home() {
     }
 }
 
-if (Object.keys(options).length !== 2 || 
-    options[Object.keys(options)[0]].pros.length < 2 || 
-    options[Object.keys(options)[0]].cons.length < 2 || 
-    options[Object.keys(options)[1]].pros.length < 2 || 
-    options[Object.keys(options)[1]].cons.length < 2) {
+if (Object.keys(options).length === 0 || 
+    !options[Object.keys(options)[0]].pros.length || 
+    !options[Object.keys(options)[0]].cons.length || 
+    (options[Object.keys(options)[1]] && (!options[Object.keys(options)[1]].pros.length || 
+    !options[Object.keys(options)[1]].cons.length))) {
     throw new Error('Invalid response format');
 }
 
@@ -67,12 +68,15 @@ return { options, bestOption };
 }
   
   
-  
-  
-  
+function sanitizeInput(input) {
+  return input.replace(/['"]+/g, '');
+}
 
   const handleSubmit =  async (event) => {
     event.preventDefault();
+
+    const sanitizedOptionA = sanitizeInput(optionA);
+    const sanitizedOptionB = sanitizeInput(optionB);
 
     // const hasGenerated = localStorage.getItem('formSubmitted');
     // if (hasGenerated) {
@@ -91,7 +95,7 @@ return { options, bestOption };
     setLoading(true); 
     setBestOption(null);            
     try {
-      const result = await axios.post('/api/openai', { question, optionA, optionB });
+      const result = await axios.post('/api/openai', { question, optionA: sanitizedOptionA, optionB: sanitizedOptionB });
       console.log(result.data.response);
       const parsedData = parseResponse(result.data.response);
   

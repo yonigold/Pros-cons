@@ -7,9 +7,23 @@ export const config = {
 
 const openai = async (req) => {
     const { question, optionA, optionB } = await req.json();
-    const prompt = `Provide me the pros and cons of this two options ${optionA} and ${optionB} in the context of ${question}.
+    const prompt = `Provide me the pros and cons of this two options ${optionA} and ${optionB} in the context of ${question}. only respons with pros and cons.
     
-    The response should be in the following format: ${optionA}: pros: 1. 2. cons: 1. 2. ${optionB}: pros: 1. 2. cons: 1. 2.`;
+    The response should always be in the following format: 
+    ${optionA}:
+    pros:
+    1.
+    2.
+    cons: 
+    1.
+    2. 
+    ${optionB}: 
+    pros: 
+    1. 
+    2. 
+    cons: 
+    1. 
+    2.`;
 
     try {
          const response = await fetch('https://api.openai.com/v1/chat/completions', {
