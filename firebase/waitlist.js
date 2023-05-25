@@ -28,7 +28,7 @@ export const addToWaitlist = async (email) => {
           timestamp: new Date()
         });
     
-        console.log("Document written with ID: ", docSnapshot.id);
+        // console.log("Document written with ID: ", docSnapshot.id);
       } catch (e) {
         console.error("Error adding document: ", e);
         throw e;

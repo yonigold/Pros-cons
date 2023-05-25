@@ -30,42 +30,40 @@ export default function Home() {
     let bestOption = "";
   
     for (const line of lines) {
-      if (line.startsWith('Pros:')) {
+      const lowerCaseLine = line.toLowerCase();
+      if (lowerCaseLine.startsWith('pros:')) {
         currentSection = 'pros';
         continue;
-      } else if (line.startsWith('Cons:')) {
+      } else if (lowerCaseLine.startsWith('cons:')) {
         currentSection = 'cons';
-        continue;
-      } else if (line.endsWith(':')) {
-        currentOption = line.slice(0, -1).trim();
-        currentOption = currentOption.replace(/['"]+/g, ''); 
-        options[currentOption] = { pros: [], cons: [] };
-        continue;
-      } else if (line.startsWith('The best option is:')) {
-        bestOption = line.slice('The best option is:'.length).trim();
         continue;
       }
 
-      
+      const lineWithoutColon = line.replace(':', '');
+      if (lineWithoutColon.length < line.length) {
+        currentOption = lineWithoutColon.trim();
+        options[currentOption] = { pros: [], cons: [] };
+        continue;
+      } 
       
       if (currentOption !== null && currentSection !== null) {
         const trimmedLine = line.trim();
         if (trimmedLine.startsWith('1.') || trimmedLine.startsWith('2.')) {
-            options[currentOption][currentSection].push(trimmedLine.slice(2).trim());
+          options[currentOption][currentSection].push(trimmedLine.slice(2).trim());
         }
+      }
     }
-}
 
-if (Object.keys(options).length === 0 || 
-    !options[Object.keys(options)[0]].pros.length || 
-    !options[Object.keys(options)[0]].cons.length || 
-    (options[Object.keys(options)[1]] && (!options[Object.keys(options)[1]].pros.length || 
-    !options[Object.keys(options)[1]].cons.length))) {
-    throw new Error('Invalid response format');
-}
+    if (Object.keys(options).length === 0 || 
+        !options[Object.keys(options)[0]].pros.length || 
+        !options[Object.keys(options)[0]].cons.length || 
+        (options[Object.keys(options)[1]] && (!options[Object.keys(options)[1]].pros.length || 
+        !options[Object.keys(options)[1]].cons.length))) {
+      throw new Error('Invalid response format');
+    }
 
-return { options, bestOption };
-}
+    return { options, bestOption };
+  }
   
   
 function sanitizeInput(input) {
@@ -77,6 +75,8 @@ function sanitizeInput(input) {
 
     const sanitizedOptionA = sanitizeInput(optionA);
     const sanitizedOptionB = sanitizeInput(optionB);
+
+
 
     // const hasGenerated = localStorage.getItem('formSubmitted');
     // if (hasGenerated) {
@@ -95,13 +95,13 @@ function sanitizeInput(input) {
     setLoading(true); 
     setBestOption(null);            
     try {
-      const result = await axios.post('/api/openai', { question, optionA: sanitizedOptionA, optionB: sanitizedOptionB });
-      console.log(result.data.response);
+      const result = await axios.post('/api/openai', { question, optionA: sanitizedOptionA, optionB: sanitizedOptionB});
+      // console.log(result.data.response);
       const parsedData = parseResponse(result.data.response);
   
       setApiResponse(parsedData.options);
       // setBestOption(parsedData.bestOption);
-      console.log(parsedData.options);
+      // console.log(parsedData.options);
       // console.log(parsedData.bestOption);
       // localStorage.setItem('formSubmitted', 'true');
       const prosAndCons = {
@@ -112,7 +112,7 @@ function sanitizeInput(input) {
     };
     
       const resultDecision = await axios.post('/api/openaiDecesion', prosAndCons);
-      console.log(resultDecision.data.response);
+      // console.log(resultDecision.data.response);
       setBestOption(resultDecision.data.response);
       
       
@@ -321,7 +321,7 @@ Join Waitlist for Full App Experience!
 </div>
 {bestOption &&
   <div className="bg-gray-200 text-black rounded-lg p-6 shadow-md hover:shadow-2xl transition-shadow duration-300 ease-in-out border-2 m-2 transform hover:scale-105 transition-transform duration-200 ease-in-out my-4">
-    <h2 className="text-center text-3xl font-bold mb-6">The Best Option is:</h2>
+    <h2 className="text-center text-3xl font-bold mb-6">Decision:</h2>
     <p className="text-center text-1xl font-semibold">{bestOption}</p>
   </div>
 }
