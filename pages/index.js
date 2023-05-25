@@ -177,7 +177,7 @@ export default function Home() {
   return (
     <>
     <Head>
-      <title>Pros 'n Cons</title>
+      <title>Pros &apos;n Cons</title>
       <meta name="description" content="Have a hard time making decisions? Let AI help you! Simply enter your question and options below and we will do the rest." />
       <meta name='keywords' content='pros and cons, pros n cons, pros and cons generator, pros and cons maker, AI, Decision making, decision maker, decision maker AI, OpenAI, GPT' />
       <meta property="og:title" content="Pros 'n Cons" />
@@ -221,7 +221,7 @@ Join Waitlist for Full App Experience!
 
   <div className="mx-auto p-8 w-full max-w-screen-lg">
   
-  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 text-center title">Pros <span className='text-indigo-900'>'n</span> Cons</h1>
+  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 text-center title">Pros <span className='text-indigo-900'>&apos;n</span> Cons</h1>
 
     <h2 className="text-1xl font-semibold text-center text-white mb-8">
       Have a hard time making decisions? Let AI help you! Simply enter your question and options below and we will do the rest.

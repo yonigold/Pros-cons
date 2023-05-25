@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default async (req, res) => {
+const openaiDecesion =  async (req, res) => {
     const { question, optionA, optionB } = req.body;
 
     const prompt = `Based on the two options ${optionA} and ${optionB} in the context of ${question}, recommend me the best option. No need to provide pros and cons, only the best option.
@@ -41,3 +41,4 @@ res.status(200).json({ response: response.data.choices[0].message.content });
 
 }
 }
+export default openaiDecesion;

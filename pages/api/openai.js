@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default async (req, res) => {
+const openai = async (req, res) => {
     const { question, optionA, optionB } = req.body;
     const prompt = `Provide me the pros and cons of this two options ${optionA} and ${optionB} in the context of ${question}.
     
@@ -56,5 +56,6 @@ export default async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 }
+export default openai;
 
 
