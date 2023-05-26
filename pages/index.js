@@ -78,11 +78,11 @@ function sanitizeInput(input) {
 
 
 
-    // const hasGenerated = localStorage.getItem('formSubmitted');
-    // if (hasGenerated) {
-    //   setModalOpen(true);
-    //   return;
-    // }
+    const hasGenerated = localStorage.getItem('formSubmitted');
+    if (hasGenerated) {
+      setModalOpen(true);
+      return;
+    }
 
     if (!question.trim() || !optionA.trim() || !optionB.trim()) {
       setFormError('Please fill all the fields');
@@ -103,7 +103,7 @@ function sanitizeInput(input) {
       // setBestOption(parsedData.bestOption);
       // console.log(parsedData.options);
       // console.log(parsedData.bestOption);
-      // localStorage.setItem('formSubmitted', 'true');
+      localStorage.setItem('formSubmitted', 'true');
       const prosAndCons = {
         question: question,
         optionA: optionA,
@@ -194,7 +194,7 @@ function sanitizeInput(input) {
       <meta property="og:type" content="website" />
       <link rel="icon" href="/favicon.png" />
       </Head>
-    <div className="flex justify-center min-h-screen flex-col"><button 
+    <div className="flex flex-col justify-between min-h-screen"><button 
   className="px-4 py-2 bg-indigo-900 text-white rounded" 
   onClick={() => setModalOpen(true)}
 >
@@ -329,11 +329,11 @@ Join Waitlist for Full App Experience!
  </div>
 
  
-<footer className="mt-auto py-4 text-center bg-indigo-900 text-white w-full">
+<footer className="mt-auto py-4 text-center bg-indigo-900 text-white w-full" >
     <p className="mb-2">
       Created by Yonatan Goldshtein. Powered by <a href="https://openai.com/" className="underline hover:text-indigo-300">OpenAI</a>.
     </p>
-    <div className="flex justify-center">
+    {/* <div className="flex justify-center">
       <a href="#" className="mx-2 hover:text-indigo-300">
         <i className="fab fa-twitter"></i>
       </a>
@@ -343,7 +343,7 @@ Join Waitlist for Full App Experience!
       <a href="#" className="mx-2 hover:text-indigo-300">
         <i className="fab fa-github"></i>
       </a>
-    </div>
+    </div> */}
   </footer>
 </div>
 </>

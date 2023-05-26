@@ -2,12 +2,24 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+#__next {
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
+  
+}
+
+
 * {
     font-family: 'Inter', sans-serif;
 }
   
-body {
+body, html {
     background-color: #0d0e11;
+    max-height: 100vh;
+    scroll-behavior: smooth;
+
+    
 }
 
 h1 {
@@ -23,6 +35,8 @@ input
 {
     background-color: #FAFAFA;
 }
+
+
 
 /* Add this in your CSS file */
 /* Add this in your CSS file */
