@@ -18,7 +18,7 @@ return (
           function gtag(){window.dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', 'G-G-5YRLPGTNHJ');
+          gtag('config', 'G-5YRLPGTNHJ');
         `}
       </Script>
     <Component {...pageProps} />;
