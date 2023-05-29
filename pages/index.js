@@ -2,7 +2,9 @@ import {useState, useEffect} from 'react';
 import Head from 'next/head';
 import Modal from '../components/Modal';
 import { addToWaitlist } from '@/firebase/waitlist';
-
+import { getSubmissionCount, incrementSubmissionCount } from '@/utils/localStorage';
+import Footer from '@/components/Footer';
+import Title from '@/components/Title';
 import axios from 'axios';
 export default function Home() {
   const [optionA, setOptionA] = useState('');
@@ -17,6 +19,7 @@ export default function Home() {
   const [waitlistError, setWaitlistError] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [waitlistSuccess, setWaitlistSuccess] = useState(false);
+  
 
 
 
@@ -77,10 +80,10 @@ function sanitizeInput(input) {
     const sanitizedOptionA = sanitizeInput(optionA);
     const sanitizedOptionB = sanitizeInput(optionB);
 
-
-
-    const hasGenerated = localStorage.getItem('formSubmitted');
-    if (hasGenerated) {
+    const submissionCount = getSubmissionCount();
+    
+  
+    if (submissionCount >= 3) {
       setModalOpen(true);
       return;
     }
@@ -93,6 +96,7 @@ function sanitizeInput(input) {
       setFormError('');
     }
 
+    incrementSubmissionCount(); 
 
     setLoading(true); 
     setBestOption(null);            
@@ -110,6 +114,7 @@ function sanitizeInput(input) {
       // console.log(parsedData.options);
       // console.log(parsedData.bestOption);
       localStorage.setItem('formSubmitted', 'true');
+
       const prosAndCons = {
         question: question,
         optionA: optionA,
@@ -236,11 +241,7 @@ Join Waitlist for Full App Experience!
 
   <div className="mx-auto p-8 w-full max-w-screen-lg">
   
-  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 text-center title">Pros <span className='text-indigo-900'>&apos;n</span> Cons</h1>
-
-    <h2 className="text-1xl font-semibold text-center text-white mb-8">
-      Have a hard time making decisions? Let AI help you! Simply enter your question and options below and we will do the rest.
-    </h2>
+  <Title />
 
     <form onSubmit={handleSubmit} className="max-w-md mx-auto">
   <div className="mb-6">
@@ -346,15 +347,8 @@ Join Waitlist for Full App Experience!
 </div>
 
 
+<Footer />
  
-
- 
-<footer className="mt-auto py-4 text-center bg-indigo-900 text-white w-full" >
-    <p className="mb-2">
-      Created by Yonatan Goldshtein. Powered by <a href="https://openai.com/" className="underline hover:text-indigo-300">OpenAI</a>.
-    </p>
-   
-  </footer>
 </div>
 </>
 
