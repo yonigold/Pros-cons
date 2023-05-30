@@ -2,12 +2,16 @@
 
 function Title() {
   return (
-    <div>
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 text-center title">Pros <span className='text-indigo-900'>&apos;n</span> Cons</h1>
+    <div className="mt-10">
+        <h1 className="text-black text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-extrabold mb-6 text-center title">
+          Pros <span className='text-emerald-500'>&apos;n</span> Cons
+        </h1>
 
-    <h2 className="text-1xl font-semibold text-center text-white mb-8">
-      Have a hard time making decisions? Let AI help you! Simply enter your question and options below and we will do the rest.
-    </h2>
+        <h2 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-center text-black-500 mb-4 subtitle">
+          Have a hard time making decisions? Let AI help you! 
+          <br />
+          Simply enter your question and options below and we will do the rest.
+        </h2>
     </div>
   )
 }

@@ -6,6 +6,7 @@ import { getSubmissionCount, incrementSubmissionCount } from '@/utils/localStora
 import Footer from '@/components/Footer';
 import Title from '@/components/Title';
 import axios from 'axios';
+
 export default function Home() {
   const [optionA, setOptionA] = useState('');
   const [optionB, setOptionB] = useState('');
@@ -205,12 +206,16 @@ function sanitizeInput(input) {
       <meta property="og:type" content="website" />
       <link rel="icon" href="/favicon.png" />
       </Head>
-    <div className="flex flex-col justify-between min-h-screen"><button 
-  className="px-4 py-2 bg-indigo-900 text-white rounded" 
+
+
+  
+
+      {/* <button 
+  className="px-4 py-2 bg-rose-500 text-white rounded" 
   onClick={() => setModalOpen(true)}
 >
 Join Waitlist for Full App Experience!
-</button>
+</button> */}
 
 <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
 <div className="my-4">
@@ -228,7 +233,7 @@ Join Waitlist for Full App Experience!
       placeholder="Enter your email"
       className="p-2 border rounded w-full md:w-2/3 mx-auto mb-2 rounded-md border border-gray-200 bg-white text-sm shadow-lg font-satoshi font-medium focus:border-black focus:outline-none focus:ring-0"
     />
-    <button type="submit" className="w-full md:w-2/3 mx-auto bg-indigo-900 text-white font-semibold py-2 px-3 rounded hover:bg-blue-600 transition duration-200 ">
+    <button type="submit" className="w-full md:w-2/3 mx-auto bg-emerald-500 text-white font-semibold py-2 px-3 rounded hover:bg-blue-600 transition duration-200 ">
       Join Waitlist
     </button>
     {waitlistError && <p className="text-red-500 text-sm mt-2">{waitlistError}</p>}
@@ -239,13 +244,27 @@ Join Waitlist for Full App Experience!
 </div>
   </Modal>
 
-  <div className="mx-auto p-8 w-full max-w-screen-lg">
-  
+  <header className='relative mt-1 px-4 text-center'>
   <Title />
+  <button 
+  className="bg-rose-500 text-white text-sm md:text-base rounded-2xl px-2 py-1 absolute right-0 top-0 md:mt-5 md:px-4 md:py-2 md:mr-8 mr-3 mt-2" 
+  onClick={() => setModalOpen(true)}
+>
+  Join The Waitlist!
+</button>
+
+</header>
+
+
+
+
+
+
+  <div className="mx-auto p-8 w-full max-w-screen-lg flex-1">
 
     <form onSubmit={handleSubmit} className="max-w-md mx-auto">
   <div className="mb-6">
-    <label htmlFor="topic" className="block mb-1 text-lg font-semibold text-white">Topic:</label>
+    <label htmlFor="topic" className="block mb-1 text-lg font-semibold text-black">Topic:</label>
     <input
       type="text"
       id="topic"
@@ -255,26 +274,29 @@ Join Waitlist for Full App Experience!
       className="w-full p-2 border rounded mb-4 rounded-md border border-gray-200 bg-white text-sm shadow-lg font-satoshi font-medium focus:border-black focus:outline-none focus:ring-0"
       minLength="10"
       maxLength="200"
+      placeholder='Where should I go on a summer vacation?'
     />
     <div className="flex flex-col md:flex-row md:justify-between mb-4">
       <div className="mb-4 md:mr-2 md:mb-0">
-        <label htmlFor="optionA" className="block mb-1 text-lg font-semibold text-white">Option A:</label>
+        <label htmlFor="optionA" className="block mb-1 text-lg font-semibold text-black">Option A:</label>
         <input
           type="text"
           id="optionA"
           name="optionA"
           value={optionA}
+          placeholder='Barcelona'
           onChange={(e) => setOptionA(e.target.value)}
           className="w-full p-2 border rounded rounded-md border border-gray-200 bg-white text-sm shadow-lg font-satoshi font-medium focus:border-black focus:outline-none focus:ring-0"
         />
       </div>
       <div className="mb-4 md:ml-2 md:mb-0">
-        <label htmlFor="optionB" className="block mb-1 text-lg font-semibold text-white">Option B:</label>
+        <label htmlFor="optionB" className="block mb-1 text-lg font-semibold text-black">Option B:</label>
         <input
           type="text"
           id="optionB"
           name="optionB"
           value={optionB}
+          placeholder='Monaco'
           onChange={(e) => setOptionB(e.target.value)}
           className="w-full p-2 border rounded rounded-md border border-gray-200 bg-white text-sm shadow-lg font-satoshi font-medium focus:border-black focus:outline-none focus:ring-0"
         />
@@ -284,7 +306,7 @@ Join Waitlist for Full App Experience!
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-indigo-900 text-white font-semibold py-2 px-3 rounded hover:bg-blue-600 transition duration-200"
+        className="w-full bg-emerald-500 text-white font-semibold py-2 px-3 rounded hover:bg-emerald-400 transition duration-200"
       >
         {loading ? 'Loading...' : 'Submit'}
       </button>
@@ -301,25 +323,25 @@ Join Waitlist for Full App Experience!
   {loading && 
     <div className="flex flex-col items-center justify-center mt-12">
       <div className="spinner mb-4"></div>
-      <p className="text-white text-center text-2xl">Just a moment...</p>
-      <p className="text-sm text-white mt-2 text-center">
+      <p className="text-black text-center text-2xl">Just a moment...</p>
+      <p className="text-sm text-black mt-2 text-center">
         The data is generated by the GPT API and may be inaccurate or outdated. Please provide a clear topic and two options to get the best results.
       </p>
     </div>
   }
 
-  <div className="md:grid md:grid-cols-2 gap-4">
+<div className="md:grid md:grid-cols-1 lg:grid-cols-2 gap-4 px-4 py-6">
     {showResults && !loading && apiResponse.isParsedSuccessfully && Object.entries(apiResponse.options).map(([option, { pros, cons }], index) => (
-      <div key={option} className="bg-gray-200 rounded-lg p-6 shadow-md hover:shadow-2xl transition-shadow duration-300 ease-in-out border-2 m-2 transform hover:scale-105 transition-transform duration-200 ease-in-out mb-4">
+      <div key={option} className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-2 border-gray-200 transform hover:scale-105 transition-transform duration-200 ease-in-out mb-4">
         <h3 className='text-center text-3xl text-black font-bold mb-6'>{option}</h3>
-        <h4 className='text-indigo-900 font-extrabold text-2xl mb-2'>Pros:</h4>
-        <div className="bg-green-100 p-2 rounded-md mb-4 shadow-sm">
+        <h4 className='text-emerald-500 font-extrabold text-2xl mb-2'>Pros:</h4>
+        <div className="bg-emerald-100 p-2 rounded-md mb-4 shadow-sm">
           <ul className='list-disc list-inside'>
           {pros && Array.isArray(pros) && pros.map((pro, i) => <li key={i} className='text-black font-semibold mb-2 leading-relaxed'>{pro}</li>)}
           </ul>
         </div>
-        <h4 className='text-indigo-900 text-2xl font-extrabold mb-2'>Cons:</h4>
-        <div className="bg-red-100 p-2 rounded-md shadow-sm">
+        <h4 className='text-rose-500 text-2xl font-extrabold mb-2'>Cons:</h4>
+        <div className="bg-rose-100 p-2 rounded-md shadow-sm">
           <ul className='list-disc list-inside'>
           {cons && Array.isArray(cons) && cons.map((con, i) => <li key={i} className='text-black font-semibold mb-2 leading-relaxed'>{con}</li>)}
           </ul>
@@ -327,29 +349,31 @@ Join Waitlist for Full App Experience!
       </div>
     ))}
   </div>
+
   {showResults && !loading && !apiResponse.isParsedSuccessfully &&
-    <div className="bg-gray-200 text-black rounded-lg p-6 shadow-md hover:shadow-2xl transition-shadow duration-300 ease-in-out border-2 m-2 transform hover:scale-105 transition-transform duration-200 ease-in-out my-4">
-      <h3 className='text-center text-3xl font-bold mb-6'>Answer</h3>
-      <p className='text-center text-1xl font-semibold'>{apiResponse.originalResponse}</p>
+    <div className="bg-white text-black rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-2 border-gray-200 transform hover:scale-105 transition-transform duration-200 ease-in-out my-4">
+      <h3 className='text-center text-3xl text-black font-bold mb-6'>Answer</h3>
+      <p className='text-center text-lg font-semibold'>{apiResponse.originalResponse}</p>
+    </div>
+}
+</div>
+
+
+<div className="flex flex-col items-center justify-center">
+  {bestOption &&
+    <div className="bg-white text-black rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out border-2 border-gray-200 transform hover:scale-105 transition-transform duration-200 ease-in-out my-4">
+      <h2 className="text-center text-3xl text-black font-bold mb-6">Decision:</h2>
+      <p className="text-center text-lg font-semibold">{bestOption}</p>
     </div>
   }
 </div>
 
-<div className="flex flex-col items-center justify-center">
-  {bestOption &&
-    <div className="bg-gray-200 text-black rounded-lg p-6 shadow-md hover:shadow-2xl transition-shadow duration-300 ease-in-out border-2 m-2 transform hover:scale-105 transition-transform duration-200 ease-in-out my-4">
-      <h2 className="text-center text-3xl font-bold mb-6">Decision:</h2>
-      <p className="text-center text-1xl font-semibold">{bestOption}</p>
-    </div>
-  }
-</div>
 
 </div>
 
 
 <Footer />
- 
-</div>
+
 </>
 
 );
