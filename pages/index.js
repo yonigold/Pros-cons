@@ -204,7 +204,10 @@ function sanitizeInput(input) {
       <meta property="og:title" content="Pros 'n Cons" />
       <meta property="og:description" content="Have a hard time making decisions? Let AI help you! Simply enter your question and options below and we will do the rest." />
       <meta property="og:type" content="website" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+     
       <link rel="icon" href="/favicon.png" />
+
       </Head>
 
 
@@ -226,18 +229,20 @@ Join Waitlist for Full App Experience!
     Be the first to know when our app fully rolls out.
   </p>
   {!waitlistSuccess ? (
-  <form className='text-center' onSubmit={handleWaitlistSubmit}>
-    <input
-      type="email"
-      name="email"
-      placeholder="Enter your email"
-      className="p-2 border rounded w-full md:w-2/3 mx-auto mb-2 rounded-md border border-gray-200 bg-white text-sm shadow-lg font-satoshi font-medium focus:border-black focus:outline-none focus:ring-0"
-    />
-    <button type="submit" className="w-full md:w-2/3 mx-auto bg-emerald-500 text-white font-semibold py-2 px-3 rounded hover:bg-blue-600 transition duration-200 ">
-      Join Waitlist
-    </button>
-    {waitlistError && <p className="text-red-500 text-sm mt-2">{waitlistError}</p>}
-  </form>
+    <form className='text-center' onSubmit={handleWaitlistSubmit}>
+      <input
+        type="email"
+        name="email"
+        placeholder="Enter your email"
+        className="p-2 border rounded w-full md:w-2/3 mx-auto mb-2 rounded-md border border-gray-200 bg-white text-sm shadow-lg font-satoshi font-medium focus:border-black focus:outline-none focus:ring-0"
+      />
+      <div className="flex justify-center items-center">
+        <button type="submit" className="bg-emerald-500 text-white font-semibold py-2 px-3 rounded hover:bg-blue-600 transition duration-200 ">
+          Join Waitlist
+        </button>
+      </div>
+      {waitlistError && <p className="text-red-500 text-sm mt-2">{waitlistError}</p>}
+    </form>
   ) : (
     <p className="text-green-500 text-sm mt-2 text-center">Thank you for joining our waitlist!</p>
   )}
@@ -245,14 +250,29 @@ Join Waitlist for Full App Experience!
   </Modal>
 
   <header className='relative mt-1 px-4 text-center'>
-  <Title />
-  <button 
-  className="bg-rose-500 text-white text-sm md:text-base rounded-2xl px-2 py-1 absolute right-0 top-0 md:mt-5 md:px-4 md:py-2 md:mr-8 mr-3 mt-2" 
-  onClick={() => setModalOpen(true)}
->
-  Join The Waitlist!
-</button>
+    <Title />
 
+    {/* Twitter icon (Left Side) */}
+    <div className="absolute left-5 top-0 flex items-center">
+        <a href="https://twitter.com/your_twitter_handle" target="_blank" rel="noopener noreferrer" className="mt-2 md:mt-5">
+            <i className="fab fa-twitter text-black text-3xl"></i>
+        </a>
+    </div>
+
+    {/* Join The Waitlist button (Right Side) */}
+    <div className="absolute right-2 top-3 sm:right-4 sm:top-4 md:right-8 md:top-5 flex items-center">
+        <button 
+            className="bg-rose-500 text-white text-sm md:text-base rounded-2xl px-2 py-1 md:px-4 md:py-2" 
+            onClick={() => setModalOpen(true)}
+        >
+            Join The Waitlist!
+        </button>
+        <a href='https://www.buymeacoffee.com/yoni7022'><button 
+            className="ml-2 bg-black text-white text-sm md:text-base rounded-2xl px-2 py-1 md:px-4 md:py-2">
+              Buy me a coffee ☕
+              
+            </button></a>
+    </div>
 </header>
 
 
@@ -373,6 +393,7 @@ Join Waitlist for Full App Experience!
 
 
 <Footer />
+
 
 </>
 
