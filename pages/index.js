@@ -254,7 +254,7 @@ Join Waitlist for Full App Experience!
 
     {/* Twitter icon (Left Side) */}
     <div className="absolute left-5 top-0 flex items-center">
-        <a href="https://twitter.com/your_twitter_handle" target="_blank" rel="noopener noreferrer" className="mt-2 md:mt-5">
+        <a href="https://twitter.com/yonigold14" target="_blank" rel="noopener noreferrer" className="mt-2 md:mt-5">
             <i className="fab fa-twitter text-black text-3xl"></i>
         </a>
     </div>
